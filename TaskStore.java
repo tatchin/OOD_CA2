@@ -97,12 +97,13 @@ public class TaskStore
         }
         return taskList;
     }*/
-    public ArrayList<Task> taskBeforeDue(TaskDate td)
+    public ArrayList<Task> taskBeforeDue(TaskDate start, TaskDate end)
     {
         ArrayList<Task> taskList = new ArrayList<Task>();
         for(int i = 0; i < this.list.size(); i++)
         {
-            if(this.list.get(i).getDueOn().compareTo(td) < 0)
+            if(this.list.get(i).getDueOn().compareTo(end) < 0 && 
+                    this.list.get(i).getDueOn().compareTo(start) > 0)
             {
                 taskList.add(this.list.get(i));
             }
