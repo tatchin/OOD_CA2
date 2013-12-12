@@ -10,14 +10,28 @@ import java.util.ArrayList;
  *
  * @author localuser
  */
-public class TaskStore 
+public class TaskStore implements Serializable, Cloneable
 {
     private ArrayList<Task> list;
     public TaskStore()
     {
         this.list = new ArrayList<Task>();
     }
-
+    
+    @Override
+    public TaskStore clone() 
+    {  
+        TaskStore taskStoreClone = null;  
+        try 
+        {  
+           taskStoreClone = (TaskStore) super.clone();  
+        } 
+        catch (CloneNotSupportedException e) 
+        {  
+            e.printStackTrace();  
+        }  
+        return taskStoreClone;  
+    }  
    
     public void add(Task t)
     {
@@ -43,9 +57,13 @@ public class TaskStore
     
     public void print()
     {
-        for(Task t : this.list)
+        for(int i = 0; i < this.list.size(); i++)
         {
-            System.out.println(t);
+            System.out.println("===========================================");
+            System.out.println("\t\tTask " + (i + 1));
+            System.out.println("===========================================");
+            System.out.println(this.list.get(i));
+            System.out.println("===========================================\n");
         }
     }
     
@@ -110,14 +128,56 @@ public class TaskStore
         }
         return taskList;
     }
-    public ArrayList<Task> copyTaskStore(ArrayList<Task> t)
+    
+//    public ArrayList<Task> copyTaskStore(ArrayList<Task> t)
+//    {
+//        ArrayList<Task> copy = new ArrayList<Task>();
+//        for(int i = 0; i < t.size(); i++)
+//        {
+//            copy.add(t.get(i));
+//        }
+//        return copy;
+//    }
+    
+    public ArrayList<Task> getTaskListByLeaderIdAndByNumberOfDay(String id, int day)
     {
-        ArrayList<Task> copy = new ArrayList<Task>();
-        for(int i = 0; i < t.size(); i++)
+        ArrayList<Task> newTask = new ArrayList<Task>();
+        for(int i = 0; i < this.list.size(); i++)
         {
-            copy.add(t.get(i));
+            if(id.equalsIgnoreCase(this.list.get(i).getTaskLeader().getId())
+                    && (this.list.get(i).getDayOverdue() > 0
+                    && this.list.get(i).getDayOverdue() > day))
+            {
+                newTask.add(this.list.get(i));
+            }
         }
-        return copy;
+        return newTask;   
+    }
+    
+    ///PROBLEM!!!!!!!!!
+    public  boolean equalLists(Object obj)
+    {     
+        TaskStore ts = (TaskStore)obj;
+        if(this.list.isEmpty() && ts.list.isEmpty())
+        {
+            return true;
+        }
+//        if(this.list.size() != ts.list.size())
+//        {
+//            return false;
+//        }
+        if(this.list.equals(ts.list))
+        {
+            return true;
+        }
+//        for (Task t : ts.list) 
+//        {
+//            if(!this.list.contains(t))
+//            {
+//                return true;
+//            }
+//        }
+        return false;
     }
 //    public void edit(String id, String i)
 //    {

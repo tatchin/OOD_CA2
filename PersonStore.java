@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author localuser
  */
-public class PersonStore 
+public class PersonStore implements Serializable
 {
     private ArrayList<Person> list;
     

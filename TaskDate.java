@@ -3,15 +3,14 @@
  * and open the template in the editor.
  */
 package ca2;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
+import java.io.Serializable;
 /**
  *
  * @author TatChin Tee
  */
-public class TaskDate implements Comparable
+public class TaskDate implements Comparable, Serializable
 {
     private Calendar taskDate;
     public TaskDate(int date, int month, int year)

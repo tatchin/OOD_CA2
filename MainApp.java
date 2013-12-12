@@ -5,6 +5,7 @@
 package ca2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -26,27 +27,12 @@ public class MainApp
     public void start()
     {
         Scanner kb = new Scanner(System.in);
-        //        Scanner kb = new Scanner(System.in);
-//
-//        Person p1 = new Person("Ann Jones", "ann@hotmail.com", "01-1234567");
-//        Person p2 = new Person("Ann Jones", "ann@hotmail.com", "01-1234567");
-//        Person p3 = new Person("Ann Jones", "ann@hotmail.com", "01-1234567");
-//        System.out.print(p1);
-//        PersonStore ps1 = new PersonStore();
-//        ps1.add(p1);
-//        ps1.add(p2);
-//        ps1.add(p3);
-//        ps1.print();
-//        ps1.deleteAll();
-//         System.out.print("--------");
-//        ps1.print();
-//        boolean s = ps1.editByEmail( p1.getId(), "sdad");
-//        System.out.print(s);
-       // this.mainMenu();
-        //this.employeeMenu();
-       // TaskDate d1 = new TaskDate(6,1,2014);
-       // System.out.print(d1.toString());
-       PersonStore personStore = new PersonStore();
+    
+        this.mainMenu();
+        this.employeeMenu();
+        TaskDate d1 = new TaskDate(6,1,2014);
+        System.out.print(d1.toString());
+        PersonStore personStore = new PersonStore();
         int choice;
         do
         {
@@ -204,15 +190,27 @@ public class MainApp
                     taskChoice = Utility.inputRange(0, 4);
                     if (taskChoice == 1)
                     {
-                        System.out.print("Enter employee name: ");
+                        System.out.print("Enter Task Name: ");
                         String name = kb.nextLine();
-                        System.out.print("Enter employee email: ");
+                        System.out.print("Enter Task Leader ID: ");
+                        String leaderID = kb.nextLine();
+                        String id;
+                        do
+                        {
+                            System.out.print("Enter Task Team ID (press \"q\" to quit): ");
+                            id = kb.nextLine(); //validation
+                        }while(id.equalsIgnoreCase("q"));
+                        System.out.print("Enter Task Added Date: ");
+                        System.out.print("\nDate: ");
+                        int date = kb.nextInt();
+                        System.out.print("\nMonth: ");
+                        int month = kb.nextInt();
+                        System.out.print("\nYear: ");
+                        int year = kb.nextInt();
                         String email = kb.nextLine();
-                        System.out.print("Enter employee telephone: ");
-                        String tel = kb.nextLine();
-                        Person person = new Person(name, email, tel);
-                        personStore.add(person);
-                        System.out.println("\n" + person);
+                       // Person person = new Person(name, email, tel);
+                       //personStore.add(person);
+                        //System.out.println("\n" + person);
                     }
                     else if (taskChoice == 2)
                     {
