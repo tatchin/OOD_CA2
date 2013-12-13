@@ -15,11 +15,11 @@ import javax.mail.internet.*;
 public class MailUtility {
 	
 /**************************************************************************************************************************************
-*														CLASS VARIABLES
+*       CLASS VARIABLES
 **************************************************************************************************************************************/
 	
 	    //variables defining logon details for senders email account
-	 	private static String USERNAME = "teetatchin@gmail.com"; //insert your gmail address
+            private static String USERNAME = "teetatchin@gmail.com"; //insert your gmail address
 	    private static String PASSWORD  = "tatchin123";        //insert your password
 	    //port and hostname for gmail server
 	    private static String HOSTNAME = "smtp.gmail.com";
@@ -28,7 +28,7 @@ public class MailUtility {
 	    private static Properties properties = getProperties();
 	    
 /**************************************************************************************************************************************
-*														GETTERS & SETTERS
+*           GETTERS & SETTERS
 **************************************************************************************************************************************/    
 	    /**
 		 * @return the uSERNAME
@@ -108,7 +108,7 @@ public class MailUtility {
 	    }
    
 /**************************************************************************************************************************************
-*														FUNCTIONALITY
+*				FUNCTIONALITY
 **************************************************************************************************************************************/
 	    
 	    /**
@@ -149,7 +149,6 @@ public class MailUtility {
 	        	 System.out.println("Something unexpected happened...");
 	        	 e.printStackTrace();
 	        }
-	        
 	        System.out.println("Done");
 	    }
 	    
@@ -215,7 +214,6 @@ public class MailUtility {
 	        System.out.println("Done");
 	    }
 	    
-	    
 	    /**
 	     * <i>Sends an email to one recipient address with one or more attachments.</i>
 	     *   @param      recipient 			Recipient address
@@ -225,7 +223,6 @@ public class MailUtility {
 	    */
 	    public static void send(String recipient, String subject, String content, String[] fileNames)
 	    {
-	    	
 	    	//use trim() to get rid of any white space before and after string because of user entry error e.g. "john@hotmail.com   "
 	    	recipient.trim();
 	    	
@@ -243,7 +240,6 @@ public class MailUtility {
 		        message.setFrom(new InternetAddress(USERNAME));
 		        message.setSubject(subject);
 		        
-		     
 		        // create a message that will have two part 
 		        MimeBodyPart messageBodyPart = new MimeBodyPart();
 
@@ -255,7 +251,6 @@ public class MailUtility {
 		        //we can add multiple file attachments with an array of filenames
 		        for(int i =0; i < fileNames.length; i++)
 		        {
-		        	
 		        	//add attachment to second part
 			        messageBodyPart = new MimeBodyPart();
 			        DataSource source = new FileDataSource(fileNames[i].trim());
@@ -271,7 +266,6 @@ public class MailUtility {
 			        multipart.addBodyPart(messageBodyPart);
 		        }
 
-		        
 		        //add both parts to the message
 		        message.setContent(multipart);
 		        
@@ -299,7 +293,6 @@ public class MailUtility {
 	     *   @param      content 			Email content  
 	     *   @param      fileNames		    An array of file name in absolute (e.g. "c:\\folder\\file.txt") or relative file path (e.g. "file.txt") path format          
 	    */
-	    
 	    public static void send(String[] toRecipients, String[] ccRecipients, String[] bccRecipients, String subject, String content, String[] fileNames)
 	    {
 	    	   	
@@ -335,7 +328,6 @@ public class MailUtility {
 		        message.setFrom(new InternetAddress(USERNAME));
 		        message.setSubject(subject);
 		        
-		     
 		        // create a message that will have two parts
 		        MimeBodyPart messageBodyPart = new MimeBodyPart();
 
@@ -363,7 +355,6 @@ public class MailUtility {
 			        multipart.addBodyPart(messageBodyPart);
 		        }
 
-		        
 		        //add both parts to the message
 		        message.setContent(multipart);
 		        
@@ -377,10 +368,7 @@ public class MailUtility {
 	        {
 	        	 System.out.println("Something unexpected happened...");
 	        	 e.printStackTrace();
-	        }
-	        
+                }     
 	        System.out.println("Done");
-	    }
-	    
-	     
+	    }	     
 }

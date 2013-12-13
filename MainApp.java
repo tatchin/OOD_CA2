@@ -28,10 +28,10 @@ public class MainApp
     {
         Scanner kb = new Scanner(System.in);
     
-        this.mainMenu();
-        this.employeeMenu();
-        TaskDate d1 = new TaskDate(6,1,2014);
-        System.out.print(d1.toString());
+//        this.mainMenu();
+//        this.employeeMenu();
+//        TaskDate d1 = new TaskDate(6,1,2014);
+//        System.out.print(d1.toString());
         PersonStore personStore = new PersonStore();
         int choice;
         do
@@ -69,33 +69,26 @@ public class MainApp
                             this.empEditMenu();
                             System.out.print("Option: ");
                             int editChoice = Utility.inputRange(0, 3);
-                            if (personStore.storeSize() == 0)
+                            switch(editChoice)
                             {
-                               System.out.println("Do not have any employee data!"); 
-                            }
-                            else
-                            {
-                                switch(editChoice)
-                                {
-                                    case 1:
-                                        System.out.print("Enter new Employee Name: ");
-                                        String name = kb.nextLine();
-                                        personStore.editByName(id, name);
-                                        break;
-                                    case 2:
-                                        System.out.print("Enter new Employee Email: ");
-                                        String email = kb.nextLine();
-                                        personStore.editByEmail(id, email);
-                                        break;
-                                    case 3:
-                                        System.out.print("Enter new Employee Tel: ");
-                                        String tel = kb.nextLine();
-                                        personStore.editByName(id, tel);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
+                                case 1:
+                                    System.out.print("Enter new Employee Name: ");
+                                    String name = kb.nextLine();
+                                    personStore.editByName(id, name);
+                                    break;
+                                case 2:
+                                    System.out.print("Enter new Employee Email: ");
+                                    String email = kb.nextLine();
+                                    personStore.editByEmail(id, email);
+                                    break;
+                                case 3:
+                                    System.out.print("Enter new Employee Tel: ");
+                                    String tel = kb.nextLine();
+                                    personStore.editByName(id, tel);
+                                    break;
+                                default:
+                                    break;
+                            }  
                         }
                         else
                         {
@@ -107,7 +100,7 @@ public class MainApp
                         this.empDelMenu();
                         System.out.print("Option: ");
                         int delChoice = Utility.inputRange(0, 2);
-                        if (personStore.storeSize() == 0)
+                        if (personStore.getSize() == 0 && delChoice != 0)
                         {
                            System.out.println("Do not have any employee data!"); 
                         }
@@ -121,6 +114,7 @@ public class MainApp
                                     if(personStore.search(id) != -1)
                                     {
                                         personStore.delete(id);
+                                        System.out.println("Delete Completed (" + id + ")");
                                     }
                                     else
                                     {
@@ -142,7 +136,7 @@ public class MainApp
                     }
                     else if (empChoice == 4)
                     {
-                        if(personStore.storeSize() != 0)
+                        if(personStore.getSize() != 0)
                         {
                             this.empPrintMenu();
                             System.out.print("Option: ");
@@ -163,7 +157,7 @@ public class MainApp
                                     personStore.printByTel(tel);
                                     break;
                                 case 4:   
-                                    personStore.printAll();
+                                    personStore.print();
                                     break;
                                 default:
                                     break;
@@ -186,14 +180,30 @@ public class MainApp
                 do
                 {
                     this.taskMenu();
+                    TaskStore taskStore = new TaskStore();
                     System.out.print("Option: ");
                     taskChoice = Utility.inputRange(0, 4);
                     if (taskChoice == 1)
                     {
                         System.out.print("Enter Task Name: ");
                         String name = kb.nextLine();
-                        System.out.print("Enter Task Leader ID: ");
-                        String leaderID = kb.nextLine();
+                        this.teamLeaderMenu();
+                        for(int i = 0; i < personStore.getSize(); i++)
+                        {
+                            System.out.println("\t[" + (i + 1) + "] " + personStore.printName(i));
+                        }
+                        System.out.println("======================================");
+                        System.out.print("Option: ");
+                        int taskLeaderIndex = Utility.inputRange(1, personStore.getSize());
+                        this.teamMemberMenu();
+                        
+                        for(int i = 0; i < taskStore.getSize(); i++)
+                        {
+                            
+                        }
+                        
+                        
+                        
                         String id;
                         do
                         {
@@ -358,14 +368,40 @@ public class MainApp
         System.out.println("\t   Task Add Menu");
         System.out.println("======================================");
         System.out.println("\t[1] Add Task Name");
-        System.out.println("\t[2] Add Task ID");
-        System.out.println("\t[3] Add Task Leader ID");
-        System.out.println("\t[4] Add Task Team");
-        System.out.println("\t[5] Added On");
-        System.out.println("\t[6] Due On");
-        System.out.println("\t[7] Completed On");
-        System.out.println("\t[8] Add Status");
+        System.out.println("\t[2] Add Task Leader");
+        System.out.println("\t[3] Add Task Team Member");
+        System.out.println("\t[4] Added On");
+        System.out.println("\t[5] Due On");
+        System.out.println("\t[6] Completed On");
+        System.out.println("\t[7] Add Status");
         System.out.println("\t[0] Back");
+        System.out.println("======================================");
+    }
+    
+    public void statusMenu()
+    {
+        System.out.println("======================================");
+        System.out.println("\t   Status Menu");
+        System.out.println("======================================");
+        System.out.println("\t[1] " + Task.Status.CANCELLED.toString());
+        System.out.println("\t[2] " + Task.Status.COMPLETED.toString());
+        System.out.println("\t[3] " + Task.Status.ONGOING.toString());
+        System.out.println("\t[4] " + Task.Status.PAUSED.toString());
+        System.out.println("\t[0] Back");
+        System.out.println("======================================");
+    }
+    
+    public void teamMemberMenu()
+    {
+        System.out.println("======================================");
+        System.out.println("\t   Team Member Menu");
+        System.out.println("======================================");
+    }
+    
+    public void teamLeaderMenu()
+    {
+        System.out.println("======================================");
+        System.out.println("\t   Team Member Menu");
         System.out.println("======================================");
     }
 }

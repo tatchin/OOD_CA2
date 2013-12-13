@@ -85,11 +85,12 @@ public class Utility
         if(kb.hasNextInt())
         {
             System.out.print("Enter date: ");
-            date = kb.nextInt();
+            date = inputRange(1, 31);
             System.out.print("Enter month: ");
-            month = kb.nextInt();
+            month = inputRange(1, 12);
             System.out.print("Enter year: ");
-            year = kb.nextInt();
+            year = inputRange(0, 4);
+            year += 2010;
         }
         else
         {

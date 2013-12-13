@@ -24,6 +24,17 @@ public class TaskComparator implements Comparator<Task>
     @Override
     public int compare(Task t1, Task t2) 
     {
-        return sortOrder * t1.getTaskStatus().compareTo(t2.getTaskStatus());
+        if(t1.getTaskStatus().ordinal() > t2.getTaskStatus().ordinal())
+        {
+           return this.sortOrder;
+        }
+        else if(t1.getTaskStatus().ordinal() < t2.getTaskStatus().ordinal())
+        {
+            return -this.sortOrder;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }

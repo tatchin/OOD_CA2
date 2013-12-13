@@ -21,13 +21,17 @@ public class PersonStore implements Serializable
     
     public void add(Person p)
     {
-        this.list.add(p);
+        if(!this.list.contains(p))
+        {
+            this.list.add(p);
+        }
     }
     
-    public int storeSize()
+    public int getSize()
     {
         return this.list.size();
     }
+    
     public int search(String id)
     {
         int position = -1;
@@ -133,14 +137,28 @@ public class PersonStore implements Serializable
        this.list.removeAll(this.list);
     }
     
-    public void printAll()
+    //return string for printing list of persons to choose a leader or member 
+    public String printName(int index)
     {
-        for(Person p : this.list)
+        return this.list.get(index).getName();
+    }
+    
+    public void print()
+    {
+        for(int i = 0; i < this.list.size(); i++)
         {
-            System.out.println(p);
+            System.out.println("===========================================");
+            System.out.println("\t\tEmployee " + (i + 1));
+            System.out.println("===========================================");
+            this.print(i);
+            System.out.println("===========================================\n");
         }
     }
     
+    public void print(int index)
+    {
+        System.out.print(this.list.get(index));
+    }
     public void printByName(String name)
     {
         if(searchName(name))

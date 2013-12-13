@@ -19,7 +19,7 @@ public class Task implements Serializable
     private TaskDate addedOn;
     private TaskDate dueOn;
     private TaskDate completedOn;
-    private ArrayList<Person> taskTeamMember;
+    public ArrayList<Person> taskTeamMember;
     private Status taskStatus;
     private Notify notifyOverdue;
     private int dayOverdue;
@@ -115,6 +115,7 @@ public class Task implements Serializable
             this.taskTeamMember.add(p);
         }
     }
+    
     
      /**
     * Print the Member names inside the taskTeamMember ArrayList
@@ -233,10 +234,6 @@ public class Task implements Serializable
     @Override
     public String toString() 
     {
-        //String leftAlignFormat = "| %-15s | %-20s |%n";
-       // System.out.format("+-----------------+------+%n");
-        //System.out.printf("| Attribute       | ID   |%n");
-        //System.out.format("+-----------------+------+%n");
         String dueDay = " ";
         if(this.isOverdue())
         {
@@ -252,16 +249,11 @@ public class Task implements Serializable
                 + "\nCompleted On   : " + this.completedOn + dueDay
                 + "\nStatus         : " + this.taskStatus 
                 + "\nNotify Overdue : " + this.notifyOverdue;
-        //System.out.format("+-----------------+------+%n");
     }
     
    
     public String toEmail() 
     {
-        //String leftAlignFormat = "| %-15s | %-20s |%n";
-       // System.out.format("+-----------------+------+%n");
-        //System.out.printf("| Attribute       | ID   |%n");
-        //System.out.format("+-----------------+------+%n");
         String dueDay = " ";
         if(this.isOverdue())
         {
@@ -277,7 +269,6 @@ public class Task implements Serializable
                 + "\nCompleted On   " + this.completedOn + dueDay
                 + "\nStatus                " + this.taskStatus 
                 + "\nNotify Overdue   " + this.notifyOverdue;
-        //System.out.format("+-----------------+------+%n");
     }
     
      /**
@@ -298,6 +289,12 @@ public class Task implements Serializable
         return day;
     }
     
+    
+   /*
+    * Determine if the task is overdue 
+    * 
+    * @return boolean 
+    */
    public boolean isOverdue()
    {
        if(this.dayOverdue > 0)
@@ -308,6 +305,27 @@ public class Task implements Serializable
        {
            return false;
        }
-   }
+    }
     
+   //(13)Send an email to a team leader and all team members when a new task has been added.
+    public void sendEmail(Task t)
+    {
+        MailUtility.send(t.getTaskLeader().getEmail(), "New Task", t.toEmail(), "text/plain");
+        t.taskTeamMember = new ArrayList<Person>();
+        for(int i = 0; i < this.taskTeamMember.size(); i++)
+        {
+            MailUtility.send(this.taskTeamMember.get(i).getEmail(), "New Task", t.toEmail(), "text/plain");
+        }
+    }
+    
+    //(14)Send a reminder email to the task team leader when a task the due for a task is within seven days/
+    public void sendEmail(Task t)
+    {
+        MailUtility.send(t.getTaskLeader().getEmail(), "New Task", t.toEmail(), "text/plain");
+        t.taskTeamMember = new ArrayList<Person>();
+        for(int i = 0; i < this.taskTeamMember.size(); i++)
+        {
+            MailUtility.send(this.taskTeamMember.get(i).getEmail(), "New Task", t.toEmail(), "text/plain");
+        }
+    }
 }

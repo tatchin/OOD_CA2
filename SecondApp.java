@@ -20,7 +20,7 @@ public class SecondApp
      */
     public static void main(String[] args) 
     {
-        MainApp theApp = new MainApp();
+        SecondApp theApp = new SecondApp();
         theApp.start();
     }
     
@@ -51,17 +51,19 @@ public class SecondApp
         t.add(t2);
         t.add(t4);
         TaskStore e = t.clone();
+        e.print();
+       
         t.print();
         TaskComparator tComparator 
                 = new TaskComparator(TaskComparator.SORT_ASCENDING);
        // Collections.sort(s, tComparator);
        // MailUtility.send("teetatchin@gmail.com", "New Task", t2.toEmail(), "text/plain");
         //System.out.println(t.equalLists(s));
-        System.out.println(t2);
-        SerializationUtility.save("c:/temp/", "taskStore.txt", t);
-	TaskStore taskStore = (TaskStore)SerializationUtility.load("c:/temp/", 
-				"taskStore.txt");
-        taskStore.print();
+//        System.out.println(t2);
+//        SerializationUtility.save("c:/temp/", "taskStore.txt", t);
+//	TaskStore taskStore = (TaskStore)SerializationUtility.load("c:/temp/", 
+//				"taskStore.txt");
+//        taskStore.print();
         //e.print();
     }
 }

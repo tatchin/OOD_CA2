@@ -5,6 +5,7 @@
 package ca2;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -17,28 +18,19 @@ public class TaskStore implements Serializable, Cloneable
     {
         this.list = new ArrayList<Task>();
     }
-    
-    @Override
-    public TaskStore clone() 
-    {  
-        TaskStore taskStoreClone = null;  
-        try 
-        {  
-           taskStoreClone = (TaskStore) super.clone();  
-        } 
-        catch (CloneNotSupportedException e) 
-        {  
-            e.printStackTrace();  
-        }  
-        return taskStoreClone;  
-    }  
    
+    //(1)Add task to the Systems
     public void add(Task t)
     {
         if(!this.list.contains(t))
         {
             this.list.add(t);
         }
+    }
+    
+    public int getSize()
+    {
+        return this.list.size();
     }
     
     public int search(String id)
@@ -54,7 +46,7 @@ public class TaskStore implements Serializable, Cloneable
         }
         return position;
     }
-    
+    //(2)Print task
     public void print()
     {
         for(int i = 0; i < this.list.size(); i++)
@@ -66,7 +58,7 @@ public class TaskStore implements Serializable, Cloneable
             System.out.println("===========================================\n");
         }
     }
-    
+    //(2)Print task by leader Id
     public void printByLeaderId(String id)
     {   
         int found = -1;
@@ -80,17 +72,8 @@ public class TaskStore implements Serializable, Cloneable
         }
         Utility.noFoundMessage(found);
     }
-    
-   /* public void taskByStatus(Task.Status status)
-    {
-        for(int i = 0; i < this.list.size(); i++)
-        {
-            if(this.list.get(i).getTaskStatus().equals(status))
-            {
-                System.out.println(this.list.get(i));
-            }
-        }
-    }*/
+  
+    //(7)Return a list of all tasks with a user-defined status.
     public ArrayList<Task> taskByStatus(Task.Status status)
     {
         ArrayList<Task> taskList = new ArrayList<Task>();
@@ -103,18 +86,8 @@ public class TaskStore implements Serializable, Cloneable
         }
         return taskList;
     }
-   /* public ArrayList<Task> taskSortedStatus(TaskDate td)
-    {
-        ArrayList<Task> taskList = new ArrayList<Task>();
-        for(int i = 0; i < this.list.size(); i++)
-        {
-            if(this.list.get(i).getDueOn().compareTo(td) < 0)
-            {
-                taskList.add(this.list.get(i));
-            }
-        }
-        return taskList;
-    }*/
+ 
+    //(8) Return a list of all tasks due within a date range.
     public ArrayList<Task> taskBeforeDue(TaskDate start, TaskDate end)
     {
         ArrayList<Task> taskList = new ArrayList<Task>();
@@ -129,16 +102,22 @@ public class TaskStore implements Serializable, Cloneable
         return taskList;
     }
     
-//    public ArrayList<Task> copyTaskStore(ArrayList<Task> t)
-//    {
-//        ArrayList<Task> copy = new ArrayList<Task>();
-//        for(int i = 0; i < t.size(); i++)
-//        {
-//            copy.add(t.get(i));
-//        }
-//        return copy;
-//    }
-    
+      //(9) Return a list of all tasks sorted by status
+    public ArrayList<Task> taskSortedStatus()
+    {
+        ArrayList<Task> taskList = new ArrayList<Task>();
+       
+        for(int i = 0; i < this.list.size(); i++)
+        {
+            taskList.add(this.list.get(i));
+        }
+         TaskComparator tComparator = new TaskComparator(TaskComparator.SORT_ASCENDING);
+        Collections.sort(taskList, tComparator);
+       
+        return taskList;
+    }
+
+    //(12) Return a list of all tasks completed by a user-defined team leader which were overdue by more than a user-defined number of days.
     public ArrayList<Task> getTaskListByLeaderIdAndByNumberOfDay(String id, int day)
     {
         ArrayList<Task> newTask = new ArrayList<Task>();
@@ -154,33 +133,60 @@ public class TaskStore implements Serializable, Cloneable
         return newTask;   
     }
     
-    ///PROBLEM!!!!!!!!!
-    public  boolean equalLists(Object obj)
-    {     
-        TaskStore ts = (TaskStore)obj;
-        if(this.list.isEmpty() && ts.list.isEmpty())
-        {
-            return true;
-        }
-//        if(this.list.size() != ts.list.size())
-//        {
-//            return false;
-//        }
-        if(this.list.equals(ts.list))
-        {
-            return true;
-        }
-//        for (Task t : ts.list) 
-//        {
-//            if(!this.list.contains(t))
-//            {
-//                return true;
-//            }
-//        }
-        return false;
+
+    //(10) Compare 2 lists for equality
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + (this.list != null ? this.list.hashCode() : 0);
+        return hash;
     }
-//    public void edit(String id, String i)
-//    {
-//        int position = searc
-//    }
+
+    @Override
+    public boolean equals(Object obj) 
+    {
+        if (obj == null) 
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass()) 
+        {
+            return false;
+        }
+        final TaskStore other = (TaskStore) obj;
+        if (this.list != other.list && (this.list == null || !this.list.equals(other.list))) {
+            return false;
+        }
+        return true;
+    }
+    
+    //(11) Copy a task store by implementing Cloneable
+    @Override
+    public TaskStore clone() 
+    {  
+        TaskStore taskStoreClone = null;  
+        try 
+        {  
+           taskStoreClone = (TaskStore) super.clone();  
+        } 
+        catch (CloneNotSupportedException e) 
+        {  
+            e.printStackTrace();  
+        }  
+        return taskStoreClone;  
+    }  
+    
+     //(14)Send a reminder email to the task team leader when a task the due for a task is within seven days.
+    public void sendReminderEmail()
+    {
+        for(int i = 0; i < this.list.size(); i++)
+        {
+            if(this.list.get(i).dayDifference() <= -7)
+            {
+                MailUtility.send(this.list.get(i).getTaskLeader().getEmail(), "New Task"
+                        , this.list.get(i).toEmail(), "text/plain");
+            }
+        }
+    }
+    
 }
